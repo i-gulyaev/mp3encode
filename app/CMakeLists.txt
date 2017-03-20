@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.5)
 project(mp3encode)
 
 
-find_path(LAME_INCLUDES lame.h ${PROJECT_SOURCE_DIR}/../lame-3.99.5/*)
+find_path(LAME_INCLUDES lame.h ${PROJECT_SOURCE_DIR}/../3pp/lame-3.99.5/*)
 #find_path(LAME_LIB NAMES libmp3lame.a PATHS ../lame-3.99.5/*)
-find_path(LAME_LIB_DIR libmp3lame.a ${PROJECT_SOURCE_DIR}/../lame-3.99.5/libmp3lame/.libs)
-find_path(LAME_LIB NAMES libmp3lame.a PATHS ${PROJECT_SOURCE_DIR}/../lame-3.99.5/*)
+find_path(LAME_LIB_DIR libmp3lame.a ${PROJECT_SOURCE_DIR}/../3pp/lame-3.99.5/libmp3lame/.libs)
+find_path(LAME_LIB NAMES libmp3lame.a PATHS ${PROJECT_SOURCE_DIR}/../3pp/lame-3.99.5/*)
 #add_library(mp3lame STATIC IMPORTED)
 
 find_package(Threads REQUIRED)
