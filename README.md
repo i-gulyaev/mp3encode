@@ -10,4 +10,4 @@ Usage:
 Run build_linux.sh
 
 ### Windows
-Use Visual Studio qith solution file from vc_solution
+Use Visual Studio with solution file from vc_solution
