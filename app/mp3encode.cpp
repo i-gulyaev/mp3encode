@@ -1,8 +1,9 @@
-#include <dirent.h>
 #include <iostream>
 #include <algorithm>
 #include <string>
 #include <thread>
+
+#include <dirent.h>
 
 #include "encoding_job.h"
 #include "thread_safe_queue.h"
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
         queue.push(std::make_pair(pcmFile, mp3File));
     }
 
-    auto numThreads = std::min(std::thread::hardware_concurrency(), queue.size());
+    auto numThreads = (std::min)(std::thread::hardware_concurrency(), queue.size());
     
     std::vector<std::thread> workers;
     

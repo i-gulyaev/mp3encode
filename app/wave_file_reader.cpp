@@ -56,7 +56,7 @@ WaveFileReader::WaveFileReader(const std::string& filename)
     if (extraFormatHeaderSize > 0) {
         uint16_t extraFormatDataSize = 0;
         mFile.read(reinterpret_cast<char*>(&extraFormatDataSize), extraFormatHeaderSize);
-        auto pos = mFile.tellg();
+        int64_t pos = mFile.tellg();
         mFile.seekg(pos + static_cast<long int>(extraFormatDataSize));
     }
     
@@ -84,7 +84,7 @@ int WaveFileReader::readSamples(PcmBuffer_t& buffer)
 {
     mFile.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
     auto bytesRead = mFile.gcount();
-    auto samplesRead = bytesRead / sizeof(PcmBuffer_t::value_type);
+    auto samplesRead = static_cast<int>(bytesRead) / sizeof(PcmBuffer_t::value_type);
     if (bytesRead % sizeof(PcmBuffer_t::value_type))
         samplesRead++;
     return samplesRead;
