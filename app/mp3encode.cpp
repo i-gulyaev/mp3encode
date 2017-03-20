@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <string>
 #include <thread>
+#include <atomic>
 
 #include <dirent.h>
 
@@ -45,24 +46,31 @@ int main(int argc, char *argv[])
         auto mp3FileName = getMp3FileName(entry->d_name);
         if (mp3FileName.empty()) continue;
 
-        std::cout << entry->d_name << '\n';
         auto pcmFile = std::string(argv[1]) + "/" + entry->d_name;
         auto mp3File = std::string(argv[1]) + "/" + mp3FileName;
         queue.push(std::make_pair(pcmFile, mp3File));
     }
 
-    auto numThreads = (std::min)(std::thread::hardware_concurrency(), queue.size());
+    auto totalFilesToEncode = queue.size();
+    auto numThreads = (std::min)(std::thread::hardware_concurrency(), totalFilesToEncode);
     
     std::vector<std::thread> workers;
+
+    std::atomic_int encodedFilesCounter(0);
     
     for (auto i = 0u; i < numThreads; ++i) {
-        std::cout << "Spawn encoding thread #" << i << '\n';
         workers.push_back(
-            std::thread([&queue](){
+            std::thread([&queue, &encodedFilesCounter](){
                     while(!queue.empty()) {
                         FilesPair f;
                         queue.pop(f);
-                        EncodingJob::encode(f.first, f.second);
+                        try {
+                            EncodingJob::encode(f.first, f.second);
+                            encodedFilesCounter++;
+                        }
+                        catch(const std::exception& ex) {
+                            std::cerr << "Encoding of file " << f.first << "failed. " << ex.what();
+                        }
                     }
                 }));
     }
@@ -70,6 +78,7 @@ int main(int argc, char *argv[])
     for (auto& worker : workers) {
         worker.join();
     }
-    
+
+    std::cout << "Encoded " << encodedFilesCounter << " out of " << totalFilesToEncode << " files\n";
     return 0;
 }

@@ -67,7 +67,7 @@ WaveFileReader::WaveFileReader(const std::string& filename)
     }
     
     
-    dump();
+//    dumpHeader();
 }
 
 int WaveFileReader::sampleRate() const
@@ -91,7 +91,7 @@ int WaveFileReader::readSamples(PcmBuffer_t& buffer)
 }
 
 
-void WaveFileReader::dump()
+void WaveFileReader::dumpHeader()
 {
     std::cout << "RIFF Header Chunk:\n"
               << "id: " << std::string(mRiff.id, mRiff.id + 4) << "\n"

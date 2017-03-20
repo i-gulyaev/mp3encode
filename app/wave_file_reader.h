@@ -48,5 +48,5 @@ private:
 
     std::ifstream mFile;
 
-    void dump();
+    void dumpHeader();
 };
